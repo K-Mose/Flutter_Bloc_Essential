@@ -4,18 +4,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CounterCubitScreen extends StatelessWidget {
   const CounterCubitScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Counter - Cubit"),
       ),
-      body: Center(
-        child: Text(
-          // .of 메소드는 listen이 false임. true를 주면 상태값 업데이트
-          "${BlocProvider.of<CounterCubit>(context, listen: true).state}",
-          style: const TextStyle(fontSize: 52.0),
-        ),
+      body: BlocBuilder<CounterCubit, CounterState>(
+        builder: (context, state) {
+          return Center(
+            child: Text(
+              "${state.counter}",
+              style: const TextStyle(fontSize: 52.0),
+            ),
+          );
+        },
       ),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
