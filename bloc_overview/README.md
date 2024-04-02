@@ -160,4 +160,14 @@ Cubit과 bloc은 새로운 state를 기존 state의 stream에 dispatch 함
 UI 안에서 Cubit과 Bloc을 제공하는 위젯
 Lazy loading이므로 사용 시점에서 생성이 됨 (선언 시점이 아님, lazy: false 시 선언 시 생성 ) 
 BlocProvider는 ~Bloc/~Cubit을 필요로 하는 위젯 트리의 상위 위젯에서 사용,
-BlocProvider.of<~Cubit/~Bloc>(context)를 사용해서 상위 context에서 상태를 얻음   
+BlocProvider.of<~Cubit/~Bloc>(context)를 사용해서 상위 context에서 상태를 얻음
+
+### BlocBuilder 
+`BlocBuilder`는 `bloc`과 `builder function`을 필요로하는 위젯이다. 
+buiilder function은 pure function 이여야 하고, 필요에 따라서 flutter 내부에서 계속 호출할 수 있기 때문에 state 값에 따라 한 번만 호출하는 Navigation이나 Dialog 같은 작업들은 피해야한다.  
+Bloc에서는 위 작업을 위해 `BlocListner`를 제공한다. 
+
+### BlocListener
+`BlocListener`는 Cubit/Bloc과 listener callback을 필요로하는 위젯
+Listener가 Widget tree의 lookup 작업을 대신 하기 때문에 `of(context)`를 호출할 필요가 없다. 
+Listener는 state에 반응하여 작성된 필요한 작업을 한 번만 수행하는 void 함수이다.  

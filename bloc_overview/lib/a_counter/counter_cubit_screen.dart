@@ -1,4 +1,5 @@
 import 'package:bloc_overview/a_counter/cubit/counter_cubit.dart';
+import 'package:bloc_overview/a_counter/other_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -11,15 +12,36 @@ class CounterCubitScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Counter - Cubit"),
       ),
-      body: BlocBuilder<CounterCubit, CounterState>(
-        builder: (context, state) {
-          return Center(
-            child: Text(
-              "${state.counter}",
-              style: const TextStyle(fontSize: 52.0),
-            ),
-          );
+      // Buiulder Function은 pure function이여야 한다.
+      // 화면이동이나 다이얼로그 등의 행동은 blocbuilder 내에서 수행되면 안됨
+      body: BlocListener<CounterCubit, CounterState>(
+        listener: (context, state) {
+          if (state.counter == 3) {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  content: Text("counter is ${state.counter}"),
+                );
+              },
+            );
+          }
+          if (state.counter == -1) {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+              return const OtherPage();
+            },));
+          }
         },
+        child: BlocBuilder<CounterCubit, CounterState>(
+          builder: (context, state) {
+            return Center(
+              child: Text(
+                "${state.counter}",
+                style: const TextStyle(fontSize: 52.0),
+              ),
+            );
+          },
+        ),
       ),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
