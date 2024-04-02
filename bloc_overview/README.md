@@ -170,4 +170,8 @@ Bloc에서는 위 작업을 위해 `BlocListner`를 제공한다.
 ### BlocListener
 `BlocListener`는 Cubit/Bloc과 listener callback을 필요로하는 위젯
 Listener가 Widget tree의 lookup 작업을 대신 하기 때문에 `of(context)`를 호출할 필요가 없다. 
-Listener는 state에 반응하여 작성된 필요한 작업을 한 번만 수행하는 void 함수이다.  
+Listener는 state에 반응하여 작성된 필요한 작업을 한 번만 수행하는 void 함수이다. 
+
+### BlocConsumer 
+`BlocConsumer`는 listener와 builder를 동시에 제공하여 빈번히 발생하는 `BlocBuilder`와 `BlocListener`의 코드를 줄여줍니다.
+`BlocConsumer`에는 이전 상태(previousState)와 현재 상태(state)를 가지고 true/false를 빈환하여 반환 값에 따라서 listener를 실핼할 것인지 아닌지 결정한다. 한 위젯에서만 사용되고 `BlocProvider`와 `BuildContext`에 접근할 수 없는 cubit/bloc을 지정할 때 사용

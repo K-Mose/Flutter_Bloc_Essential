@@ -14,7 +14,7 @@ class CounterCubitScreen extends StatelessWidget {
       ),
       // Buiulder Function은 pure function이여야 한다.
       // 화면이동이나 다이얼로그 등의 행동은 blocbuilder 내에서 수행되면 안됨
-      body: BlocListener<CounterCubit, CounterState>(
+      body: BlocConsumer<CounterCubit, CounterState>(
         listener: (context, state) {
           if (state.counter == 3) {
             showDialog(
@@ -32,16 +32,14 @@ class CounterCubitScreen extends StatelessWidget {
             },));
           }
         },
-        child: BlocBuilder<CounterCubit, CounterState>(
-          builder: (context, state) {
-            return Center(
-              child: Text(
-                "${state.counter}",
-                style: const TextStyle(fontSize: 52.0),
-              ),
-            );
-          },
-        ),
+        builder: (context, state) {
+          return Center(
+            child: Text(
+              "${state.counter}",
+              style: const TextStyle(fontSize: 52.0),
+            ),
+          );
+        },
       ),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
