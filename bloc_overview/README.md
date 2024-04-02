@@ -241,3 +241,47 @@ Widget build(BuildContext context) {
 }
 ```
 `BlocBuilder`의 `builder`를 사용하거나 `Builder` 위젯만을 사용해서 `build`내부에 있는 위젯만 rebuild 시킴
+
+
+# *You used a `BuildContext` that is an ancestor of the provider you are trying to read.*
+```dart
+@override
+Widget build(BuildContext context) {
+  return BlocProvider(
+    create: (context) => ThemeBloc(),
+    child: MaterialApp(
+      title: 'Flutter Demo',
+      theme: context.watch<ThemeBloc>().state.appTheme == AppTheme.light
+          ? ThemeData.light()
+          : ThemeData.dark(),
+      home: const MainScreen(),
+    ),
+  );
+}
+```
+위와 같이 Bloc을 앱 생성 시점 또는 즉각적으로 사용 시에 `Provider`에러가 발생한다. 
+> Make sure that BlocBuilder<ThemeBloc, ThemeState> is under your MultiProvider/Provider<ThemeState>.
+This usually happens when you are creating a provider and trying to read it immediately.
+
+이러한 이유는 Bloc에서 내부적으로 Provider를 사용해서 위젯트리에 bloc을 제공하고 위젯트리에서 bloc을 엑세스할 수 있게 하기 때문
+-> `Builder Widget`을 사용하여 문제 해결
+```dart
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider<ThemeBloc>(
+      create: (context) => ThemeBloc(),
+      child: Builder( 
+        builder: (context) {
+          return MaterialApp(
+            title: 'Flutter Demo',
+            theme: context.watch<ThemeBloc>().state.appTheme == AppTheme.light
+                ? ThemeData.light()
+                : ThemeData.dark(),
+            home: const MainScreen(),
+          );
+        },
+      ),
+    );
+  }
+```
+`BlocBuilder`는 `Builder`와 `context.watch()`를 같이 사용하는 것과 같은 효과

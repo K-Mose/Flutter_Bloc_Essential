@@ -17,13 +17,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return BlocProvider<ThemeBloc>(
       create: (context) => ThemeBloc(),
-      child: BlocBuilder<ThemeBloc, ThemeState>(
-        builder: (context, state) {
+      child: Builder(
+        builder: (context) {
           return MaterialApp(
             title: 'Flutter Demo',
-            theme: state.appTheme == AppTheme.light
+            theme: context.watch<ThemeBloc>().state.appTheme == AppTheme.light
                 ? ThemeData.light()
                 : ThemeData.dark(),
             home: const MainScreen(),
