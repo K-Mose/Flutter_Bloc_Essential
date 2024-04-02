@@ -175,3 +175,69 @@ Listener는 state에 반응하여 작성된 필요한 작업을 한 번만 수�
 ### BlocConsumer 
 `BlocConsumer`는 listener와 builder를 동시에 제공하여 빈번히 발생하는 `BlocBuilder`와 `BlocListener`의 코드를 줄여줍니다.
 `BlocConsumer`에는 이전 상태(previousState)와 현재 상태(state)를 가지고 true/false를 빈환하여 반환 값에 따라서 listener를 실핼할 것인지 아닌지 결정한다. 한 위젯에서만 사용되고 `BlocProvider`와 `BuildContext`에 접근할 수 없는 cubit/bloc을 지정할 때 사용
+
+### [Extension Methods](https://bloclibrary.dev/flutter-bloc-concepts/#extension-methods)
+- context.watch<T>(): 가장 가까운 상위의 T 타입을 찾아 제공하고, T 타입의 상태가 변경되면 화면을 rebuild 한다. BlocProvider.of(context, listen: true)와 같은 효과를 갖음
+- context.read<T>(): T 타입의 객체(상태)는 필요하지만 화면을 rebuild 할 필요가 없을 때 사용
+- context.select<T, R>(): T 타입의 객체에서 property 많을 경우 특정 property만 listen 하고싶은 경우 사용  
+  ```dart
+  Widget Build(BuildContext context) {
+    // Person 객체에서 name만 관찰하고싶지만 다른 프로퍼티(age)가 변경되면 화면이 rebuild됨
+    final person = context.watch<Person>();
+    return Text(person.name);
+  }
+  /// select 사용하여 특정 프로퍼티만 선택
+  Widget Build(BuilContext context) {
+    // 이제 Person의 name만 바뀐 경우에만 화면이 rebuild됨
+    final name = context.select((Person p) => p.name);
+    return Text(name);
+  }
+  ```
+  
+```dart
+@override
+Widget build(BuildContext context) {
+  // Whenever the state changes, the MaterialApp is rebuilt
+  // even though it is only used in the Text widget.
+  final state = context.watch<MyBloc>().state;
+  return MaterialApp(
+    home: Scaffold(
+      body: Text(state.value),
+    ),
+  );
+}
+```
+위 처럼 사용하면 stete가 변할 때 Scaffold 내에 모든 위젯이 rebuild 됨
+
+```dart
+/// BlocBuilder 사용
+Widget build(BuildContext context) {
+  return MaterialApp(
+    home: Scaffold(
+      body: BlocBuilder<MyBloc, MyState>(
+        builder: (context, state) {
+          // Whenever the state changes, only the Text is rebuilt.
+          return Text(state.value);
+        },
+      ),
+    ),
+  );
+}
+
+/// Builder 사용
+@override
+Widget build(BuildContext context) {
+  return MaterialApp(
+    home: Scaffold(
+      body: Builder(
+        builder: (context) {
+          // Whenever the state changes, only the Text is rebuilt.
+          final state = context.watch<MyBloc>().state;
+          return Text(state.value);
+        },
+      ),
+    ),
+  );
+}
+```
+`BlocBuilder`의 `builder`를 사용하거나 `Builder` 위젯만을 사용해서 `build`내부에 있는 위젯만 rebuild 시킴

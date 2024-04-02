@@ -47,7 +47,7 @@ class CounterCubitScreen extends StatelessWidget {
           FloatingActionButton(
             heroTag: 'increment',
             onPressed: () {
-              BlocProvider.of<CounterCubit>(context).increment();
+              context.read<CounterCubit>().increment();
             },
             child: const Icon(Icons.add),
           ),
@@ -55,7 +55,7 @@ class CounterCubitScreen extends StatelessWidget {
           FloatingActionButton(
             heroTag: 'decrement',
             onPressed: () {
-              BlocProvider.of<CounterCubit>(context).decrement();
+              context.read<CounterCubit>().decrement();
             },
             child: const Icon(Icons.remove),
           ),
