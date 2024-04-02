@@ -12,3 +12,29 @@ class AddTodoEvent extends TodoEvent {
 }
 ```
 이벤트에서 payload를 함께 보내고싶을 때는 위 처럼 이벤트 생성자에 파라메터를 추가해서 생성하면 된다. 
+
+Cubit에서는 function에서 매개변수로 넘겨받으면 된다.
+```dart
+// theme_cubit.dart 
+class ThemeCubit extends Cubit<ThemeState> {
+  ThemeCubit() : super(ThemeState.initial());
+
+  void changeTheme(int randInt) {
+    if (randInt % 2 == 0) {
+      emit(state.copyWith(appTheme: AppTheme.light));
+    } else {
+      emit(state.copyWith(appTheme: AppTheme.dart));
+    }
+  }
+}
+
+// ... 
+// theme_setting_cubit_screen.dart
+// ...
+onPressed: () {
+  final randInt = Random().nextInt(10);
+  context.read<ThemeCubit>().changeTheme(randInt);
+},
+// ...
+
+```
