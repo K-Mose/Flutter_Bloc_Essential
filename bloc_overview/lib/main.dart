@@ -10,6 +10,8 @@ import 'package:bloc_overview/c_bloc_to_bloc/bloc_to_bloc_screen.dart';
 import 'package:bloc_overview/c_cubit_to_cubit/cubit_to_cubit_bloc_listener_screen.dart';
 import 'package:bloc_overview/c_cubit_to_cubit/cubit_to_cubit_screen.dart';
 import 'package:bloc_overview/d_bloc_access/a_bloc_access/bloc_access.dart';
+import 'package:bloc_overview/d_bloc_access/b_anonymous_route_access/bloc_anonymous.dart';
+import 'package:bloc_overview/d_bloc_access/b_anonymous_route_access/cubit/counter_cubit.dart' as AnonymousCubit;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -140,6 +142,21 @@ class _MainScreenState extends State<MainScreen> {
                       MaterialPageRoute(builder: (context) {
                         // 하위 위젯에서 CounterBloc을 사용할 수 있게 의존성 주입
                         return const BlocAccess();
+                      },)
+                  );
+                },
+                child: const Text("#4 Bloc Access"),
+              ),
+              const SizedBox(height: 12,),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) {
+                        // 하위 위젯에서 CounterBloc을 사용할 수 있게 의존성 주입
+                        return BlocProvider<AnonymousCubit.CounterCubit>(
+                          create: (context) => AnonymousCubit.CounterCubit(),
+                          child: const BlocAnonymous(),
+                        );
                       },)
                   );
                 },
