@@ -6,6 +6,7 @@ import 'package:bloc_overview/b_theme/app_theme.dart';
 import 'package:bloc_overview/b_theme/bloc/theme_bloc.dart';
 import 'package:bloc_overview/b_theme/cubit/theme_cubit.dart';
 import 'package:bloc_overview/b_theme/theme_setting_screen.dart';
+import 'package:bloc_overview/c_cubit_to_cubit/cubit_to_cubit_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -93,6 +94,18 @@ class _MainScreenState extends State<MainScreen> {
                 );
               },
               child: const Text("#2 Theme App - Bloc Event Payload"),
+            ),
+            const SizedBox(height: 12,),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) {
+                      // 하위 위젯에서 CounterBloc을 사용할 수 있게 의존성 주입
+                      return const CubitToCubitScreen();
+                    },)
+                );
+              },
+              child: const Text("#3 Cubit to Cubit - MultiBlocProvider"),
             ),
           ],
         ),
