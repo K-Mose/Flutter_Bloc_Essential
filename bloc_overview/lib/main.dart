@@ -3,7 +3,6 @@ import 'package:bloc_overview/a_counter/counter_bloc_screen.dart';
 import 'package:bloc_overview/a_counter/counter_cubit_screen.dart';
 import 'package:bloc_overview/a_counter/cubit/counter_cubit.dart';
 import 'package:bloc_overview/b_theme/app_theme.dart';
-import 'package:bloc_overview/b_theme/bloc/theme_bloc.dart';
 import 'package:bloc_overview/b_theme/cubit/theme_cubit.dart';
 import 'package:bloc_overview/b_theme/theme_setting_screen.dart';
 import 'package:bloc_overview/c_bloc_to_bloc/bloc_to_bloc_screen.dart';
@@ -12,6 +11,9 @@ import 'package:bloc_overview/c_cubit_to_cubit/cubit_to_cubit_screen.dart';
 import 'package:bloc_overview/d_bloc_access/a_bloc_access/bloc_access.dart';
 import 'package:bloc_overview/d_bloc_access/b_anonymous_route_access/bloc_anonymous.dart';
 import 'package:bloc_overview/d_bloc_access/b_anonymous_route_access/cubit/counter_cubit.dart' as AnonymousCubit;
+import 'package:bloc_overview/d_bloc_access/c_named_route/cubit/counter_cubit.dart';
+import 'package:bloc_overview/d_bloc_access/c_named_route/bloc_named.dart';
+import 'package:bloc_overview/d_bloc_access/c_named_route/show_counter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,8 +21,16 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  // Named Route에서 route를 지정할 때 context에 bloc을 넘겨주기 위해 사용
+  final NamedCounterCubit namedCubit = NamedCounterCubit();
 
   // This widget is the root of your application.
   @override
@@ -37,11 +47,30 @@ class MyApp extends StatelessWidget {
             theme: context.watch<ThemeCubit>().state.appTheme == AppTheme.light
                 ? ThemeData.light()
                 : ThemeData.dark(),
-            home: const MainScreen(),
+            // home: const MainScreen(),
+            initialRoute: "/",
+            routes: {
+              '/': (context) => const MainScreen(),
+              // volue constructor로 cubit 넘겨줌
+              BlocNamed.routeName: (context) => BlocProvider.value(
+                value: namedCubit,
+                child: const BlocNamed()
+              ),
+              ShowCounter.routeName: (context) => BlocProvider.value(
+                  value: namedCubit,
+                  child: const ShowCounter(),
+              ),
+            },
           );
         },
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    namedCubit.close();
+    super.dispose();
   }
 }
 
@@ -160,7 +189,15 @@ class _MainScreenState extends State<MainScreen> {
                       },)
                   );
                 },
-                child: const Text("#4 Bloc Access"),
+                child: const Text("#4 Bloc Access - Anonymous"),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed(
+                    BlocNamed.routeName
+                  );
+                },
+                child: const Text("#4 Bloc Access - Named"),
               ),
             ],
           ),
