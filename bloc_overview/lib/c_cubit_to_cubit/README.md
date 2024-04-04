@@ -35,3 +35,11 @@ class CubitB extends Cubit<CubitBState> {
 State의 변화를 감지하여 액션을 수행하는 리스너에서 상태 변화를 감지하면 다른 Cubit/Bloc의 function/event를 트리거한다. 
 (Cubit 함수를 호출하거나 Bloc의 이벤트 호출은 비즈니스 로직과는 무관)
 BlocListener로 기능을 트리거 하기때문에 cubit/bloc 내에서 의존성이 떨어진다.  
+
+- cubit + StreamSubscription
+- cubit + BlocListener
+- bloc + StreamSubscription
+- bloc + BlocListener
+같이 처리할 state가 많지 않을 때는 BlocListener로, state가 많으면 StreamSubscription을 사용하는 것을 추천
+> **StreamSubscription** : construct body에 의존하는 state를 stream을 사용해서 listen
+> **BlocListener** : 1개의 state를 listen해서 다른 state를 업데이트 
