@@ -1,4 +1,6 @@
-# Cubit to Cubit
+# Cubit/Bloc to Cubit/Bloc
+
+## State Stream 사용
 Cubit 간 스트림 연결
 
 기본적으로 상태 스트림에 디스패치해서 상태값을 업데이트 함 
@@ -28,3 +30,8 @@ class CubitB extends Cubit<CubitBState> {
 ```
 
 참고: [BlocToBloc Communication](https://bloclibrary.dev/architecture/#bloc-to-bloc-communication)
+
+## BlocListener 사용
+State의 변화를 감지하여 액션을 수행하는 리스너에서 상태 변화를 감지하면 다른 Cubit/Bloc의 function/event를 트리거한다. 
+(Cubit 함수를 호출하거나 Bloc의 이벤트 호출은 비즈니스 로직과는 무관)
+BlocListener로 기능을 트리거 하기때문에 cubit/bloc 내에서 의존성이 떨어진다.  
