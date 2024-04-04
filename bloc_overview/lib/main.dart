@@ -6,6 +6,8 @@ import 'package:bloc_overview/b_theme/app_theme.dart';
 import 'package:bloc_overview/b_theme/bloc/theme_bloc.dart';
 import 'package:bloc_overview/b_theme/cubit/theme_cubit.dart';
 import 'package:bloc_overview/b_theme/theme_setting_screen.dart';
+import 'package:bloc_overview/c_bloc_to_bloc/bloc_to_bloc_screen.dart';
+import 'package:bloc_overview/c_cubit_to_cubit/cubit_to_cubit_bloc_listener_screen.dart';
 import 'package:bloc_overview/c_cubit_to_cubit/cubit_to_cubit_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -55,6 +57,7 @@ class _MainScreenState extends State<MainScreen> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ElevatedButton(
               onPressed: () {
@@ -112,11 +115,22 @@ class _MainScreenState extends State<MainScreen> {
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) {
                       // 하위 위젯에서 CounterBloc을 사용할 수 있게 의존성 주입
-                      return const CubitToCubitScreen();
+                      return const CubitToCubitBlocListenerScreen();
                     },)
                 );
               },
               child: const Text("#3 Cubit to Cubit - BlocListener"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) {
+                      // 하위 위젯에서 CounterBloc을 사용할 수 있게 의존성 주입
+                      return const BlocToBlocScreen();
+                    },)
+                );
+              },
+              child: const Text("#3 Bloc to Bloc"),
             ),
           ],
         ),
