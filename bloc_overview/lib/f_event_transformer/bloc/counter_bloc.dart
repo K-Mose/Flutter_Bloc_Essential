@@ -7,7 +7,7 @@ part 'counter_event.dart';
 part 'counter_state.dart';
 
 class TransformerCounterBloc extends Bloc<CounterEvent, CounterState> {
-  TransformerCounterBloc() : super(CounterState.initail()) {
+  TransformerCounterBloc() : super(CounterState.initial()) {
     /*on<CounterIncrementPressed>(
         _handleIncrementCounterEvent,
         transformer: restartable()

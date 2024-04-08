@@ -7,7 +7,7 @@ class CounterState {
     required this.counter
   });
 
-  factory CounterState.initail() => const CounterState(counter: 0);
+  factory CounterState.initial() => const CounterState(counter: 0);
 
   CounterState copyWith({
     int? counter,
