@@ -17,6 +17,8 @@ import 'package:bloc_overview/d_bloc_access/c_named_route/show_counter.dart';
 import 'package:bloc_overview/d_bloc_access/d_generated_route/bloc_generated.dart';
 import 'package:bloc_overview/e_bloc_observer/bloc_observer_screen.dart';
 import 'package:bloc_overview/e_bloc_observer/observer/app_bloc_observer.dart';
+import 'package:bloc_overview/f_event_transformer/bloc/counter_bloc.dart';
+import 'package:bloc_overview/f_event_transformer/counter_bloc_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -250,6 +252,20 @@ class _MainScreenState extends State<MainScreen> {
                   );
                 },
                 child: const Text("#5 Bloc Observer"),
+              ),
+              const SizedBox(height: 12,),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) {
+                      return BlocProvider(
+                        create: (context) => TransformerCounterBloc(),
+                        child: const EventTransformerScreen()
+                      );
+                    },)
+                  );
+                },
+                child: const Text("#6 Event Transformer"),
               ),
             ],
           ),
