@@ -285,3 +285,18 @@ This usually happens when you are creating a provider and trying to read it imme
   }
 ```
 `BlocBuilder`는 `Builder`와 `context.watch()`를 같이 사용하는 것과 같은 효과
+
+
+# Cubit vs Bloc
+![](screenshot/cubit_bloc.png)
+**Cubit**
+- 구조도 간단하고 단순하게 작성 가능 
+- Bloc 대비 만드어야 하는 코드가 적음 
+
+**Bloc**
+- State 변화의 순서와 원인을 알 수 있음 
+- EventTransformation으로 Event의 사전 작업 처리 가능
+
+어떤 것을 써야할 것인지 모를때는 우선 `Cubit`을 사용하는 것을 추천
+`Cubit`->`Bloc`으로 리팩터링하는 것은 쉬우나 
+`Bloc`->`Cubit`으로 리팩터링하는 것는 어려움 
