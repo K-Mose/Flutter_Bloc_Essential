@@ -19,10 +19,24 @@ import 'package:bloc_overview/e_bloc_observer/bloc_observer_screen.dart';
 import 'package:bloc_overview/e_bloc_observer/observer/app_bloc_observer.dart';
 import 'package:bloc_overview/f_event_transformer/bloc/counter_bloc.dart';
 import 'package:bloc_overview/f_event_transformer/counter_bloc_screen.dart';
+import 'package:bloc_overview/g_hydrated_bloc/bloc/counter/counter_bloc.dart';
+import 'package:bloc_overview/g_hydrated_bloc/bloc/theme/theme_bloc.dart';
+import 'package:bloc_overview/g_hydrated_bloc/hydarted_bloc_screen.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 
-void main() {
+void main() async {
+  // native 코드를 호출하기 때문에 사용
+  WidgetsFlutterBinding.ensureInitialized();
+
+  HydratedBloc.storage = await HydratedStorage.build(
+      storageDirectory: kIsWeb
+          ? HydratedStorage.webStorageDirectory
+          : await getApplicationDocumentsDirectory(),
+  );
   // Observer 등록
   Bloc.observer = AppBlocObserver();
   runApp(const MyApp());
@@ -47,13 +61,13 @@ class _MyAppState extends State<MyApp> {
     // return BlocProvider<ThemeBloc>(
     //   create: (context) => ThemeBloc(),
     // MaterialApp을 BlocProvider로 감싸 전역적으로 접근 가능하게 한다. (Cubit/Bloc Gobal Access)
-    return BlocProvider<ThemeCubit>(
-      create: (context) => ThemeCubit(),
+    return BlocProvider<HydratedThemeBloc>(
+      create: (context) => HydratedThemeBloc(),
       child: Builder(
         builder: (context) {
           return MaterialApp(
             title: 'Flutter Demo',
-            theme: context.watch<ThemeCubit>().state.appTheme == AppTheme.light
+            theme: context.watch<HydratedThemeBloc>().state.appTheme == AppTheme.light
                 ? ThemeData.light()
                 : ThemeData.dark(),
             // home: const MainScreen(),
@@ -266,6 +280,20 @@ class _MainScreenState extends State<MainScreen> {
                   );
                 },
                 child: const Text("#6 Event Transformer"),
+              ),
+              const SizedBox(height: 12,),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) {
+                      return BlocProvider(
+                        create: (context) => HydratedCounterBloc(),
+                        child: const HydratedBlocScreen()
+                      );
+                    },)
+                  );
+                },
+                child: const Text("#7 Hydrated Bloc"),
               ),
             ],
           ),
