@@ -14,6 +14,7 @@ import 'package:bloc_overview/d_bloc_access/b_anonymous_route_access/cubit/count
 import 'package:bloc_overview/d_bloc_access/c_named_route/cubit/counter_cubit.dart';
 import 'package:bloc_overview/d_bloc_access/c_named_route/bloc_named.dart';
 import 'package:bloc_overview/d_bloc_access/c_named_route/show_counter.dart';
+import 'package:bloc_overview/d_bloc_access/d_generated_route/bloc_generated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -30,6 +31,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   // Named Route에서 route를 지정할 때 context에 bloc을 넘겨주기 위해 사용
+  // 전역적으로 동일한 cubit/bloc을 전달할 수 있음
   final NamedCounterCubit namedCubit = NamedCounterCubit();
 
   // This widget is the root of your application.
@@ -38,6 +40,7 @@ class _MyAppState extends State<MyApp> {
     // Bloc
     // return BlocProvider<ThemeBloc>(
     //   create: (context) => ThemeBloc(),
+    // MaterialApp을 BlocProvider로 감싸 전역적으로 접근 가능하게 한다. (Cubit/Bloc Gobal Access)
     return BlocProvider<ThemeCubit>(
       create: (context) => ThemeCubit(),
       child: Builder(
@@ -60,6 +63,32 @@ class _MyAppState extends State<MyApp> {
                   value: namedCubit,
                   child: const ShowCounter(),
               ),
+              BlocGenerated.routeName: (context) => BlocProvider.value(
+                  value: namedCubit,
+                  child: const BlocGenerated()
+              ),
+            },
+            // Generated Route에서도 value constructor를 사용해서 하위 위젯에 cubit/bloc을 전달한다.
+            onGenerateRoute: (RouteSettings settings) {
+              switch (settings.name) {
+                case BlocNamed.routeName:
+                  return MaterialPageRoute(builder: (context) => BlocProvider.value(
+                    value: namedCubit,
+                    child: const BlocNamed(),));
+                case BlocGenerated.routeName :
+                  return MaterialPageRoute(builder: (context) => BlocProvider.value(
+                      value: namedCubit,
+                      child: const BlocGenerated()
+                  ),);
+                case ShowCounter.routeName:
+                  return MaterialPageRoute(builder: (context) => BlocProvider.value(
+                      value: namedCubit,
+                      child: const ShowCounter()
+                  ),);
+                default:
+                  return null;
+
+              }
             },
           );
         },
@@ -198,6 +227,14 @@ class _MainScreenState extends State<MainScreen> {
                   );
                 },
                 child: const Text("#4 Bloc Access - Named"),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed(
+                    BlocNamed.routeName
+                  );
+                },
+                child: const Text("#4 Bloc Access - Generated"),
               ),
             ],
           ),
