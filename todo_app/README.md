@@ -17,3 +17,10 @@ Bloc 이용한 ToDoApp
 - Always extends Equatable class 
   - Object instance들의 equality check를 쉽게 할 수 있음
   - stringify 등의 편의 함수 제공
+
+### State 종류
+- Independent Stats : 독립적으로 사용되는 상태
+  - todoFilter / todoSearch / todoList
+- Computed States : 다른 상태를 의존하는 상태 (복합적으로 사용되는)
+  - StreamSubscription / BlocListener 로 사용
+  - activeTodo / filteredTodos / injectingCubit ..
