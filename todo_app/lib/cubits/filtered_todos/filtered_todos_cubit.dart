@@ -18,12 +18,14 @@ class FilteredTodosCubit extends Cubit<FilteredTodosState> {
   final TodoListCubit todoListCubit;
   final TodoFilterCubit todoFilterCubit;
   final TodoSearchCubit todoSearchCubit;
+  final List<Todo> initialTodos;
 
   FilteredTodosCubit({
+    required this.initialTodos,
     required this.todoListCubit,
     required this.todoFilterCubit,
     required this.todoSearchCubit,
-  }) : super(FilteredTodosState.initial()) {
+  }) : super(FilteredTodosState.initial(todos: initialTodos)) {
     // setFilteredTodos를 아래 세 상태가 업데이트 될 때마다 실행시킴
     todoListSubscription = todoListCubit.stream.listen((event) {
       setFilteredTodos();

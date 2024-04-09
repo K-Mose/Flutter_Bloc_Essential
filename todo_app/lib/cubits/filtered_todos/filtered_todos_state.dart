@@ -4,8 +4,8 @@ class FilteredTodosState extends Equatable {
   final List<Todo> filteredTodos;
   const FilteredTodosState({required this.filteredTodos});
 
-  factory FilteredTodosState.initial() =>
-      const FilteredTodosState(filteredTodos: []);
+  factory FilteredTodosState.initial({List<Todo>? todos}) =>
+       FilteredTodosState(filteredTodos: todos ?? []);
 
   @override
   List<Object> get props => [filteredTodos];
