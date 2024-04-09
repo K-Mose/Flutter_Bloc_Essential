@@ -20,7 +20,7 @@ Bloc 이용한 ToDoApp
 
 ### State 종류
 - Independent Stats : 독립적으로 사용되는 상태
-  - todoFilter / todoSearch / todoList
+  - todoFilter / todoSearch / todoList ..
 - Computed States : 다른 상태를 의존하는 상태 (복합적으로 사용되는)
   - StreamSubscription / BlocListener 로 사용
-  - activeTodo / filteredTodos / injectingCubit ..
+  - activeTodo / filteredTodos ..
