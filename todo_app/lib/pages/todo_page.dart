@@ -22,7 +22,7 @@ class TodoPage extends StatelessWidget {
                   const TodoHeader(),
                   const CreateTodo(),
                   const SizedBox(height: 20.0,),
-                  const SearchAndFilterTodo(),
+                  SearchAndFilterTodo(),
                   const ShowTodos(),
                 ],
               ),
