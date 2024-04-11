@@ -8,15 +8,39 @@ class ShowTodos extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final todos = context.watch<FilteredTodosCubit>().state.filteredTodos;
-    print("todos: $todos");
-    print(todos.length);
-     return ListView(
-       primary: false,
-       shrinkWrap: true,
-       children: [
-         for(final todo in todos)
-            Text(todo.desc, style: TextStyle(fontSize: 20.0)),
-       ],
-     );
+
+    return ListView.separated(
+      primary: false,
+      shrinkWrap: true,
+      itemCount: todos.length,
+      separatorBuilder: (context, index) {
+        return const Divider(color: Colors.grey,);
+      },
+      itemBuilder: (BuildContext context, int index) {
+        return Dismissible(
+          key: ValueKey(todos[index].id),
+          background: showBackground(0),
+          secondaryBackground: showBackground(1),
+          child: Text(
+            todos[index].desc,
+            style: TextStyle(fontSize: 20.0),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget showBackground(int direction) {
+    return Container(
+      margin: const EdgeInsets.all(4.0),
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      color: Colors.red,
+      alignment: direction == 0 ? Alignment.centerLeft : Alignment.centerRight,
+      child: Icon(
+        Icons.delete,
+        size: 30.0,
+        color: Colors.white,
+      ),
+    );
   }
 }
