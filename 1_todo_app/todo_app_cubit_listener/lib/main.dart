@@ -26,14 +26,10 @@ class MyApp extends StatelessWidget {
             create: (context) => ActiveTodoCountCubit(
               // 초기값 설정을 위해 constructor에 값을 넘겨서 초기화 시킴
               initialActiveTodoCount: context.read<TodoListCubit>().state.todos.length,
-              todoListCubit: BlocProvider.of<TodoListCubit>(context)
             ),),
         BlocProvider<FilteredTodosCubit>(
             create: (context) => FilteredTodosCubit(
               initialTodos: context.read<TodoListCubit>().state.todos,
-              todoFilterCubit: BlocProvider.of<TodoFilterCubit>(context),
-              todoSearchCubit: BlocProvider.of<TodoSearchCubit>(context),
-              todoListCubit: BlocProvider.of<TodoListCubit>(context)
             ),),
       ],
       child: MaterialApp(

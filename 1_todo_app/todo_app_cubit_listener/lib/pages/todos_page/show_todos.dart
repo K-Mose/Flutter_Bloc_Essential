@@ -10,47 +10,78 @@ class ShowTodos extends StatelessWidget {
   Widget build(BuildContext context) {
     final todos = context.watch<FilteredTodosCubit>().state.filteredTodos;
 
-    return ListView.separated(
-      primary: false,
-      shrinkWrap: true,
-      itemCount: todos.length,
-      separatorBuilder: (context, index) {
-        return const Divider(color: Colors.grey,);
-      },
-      itemBuilder: (BuildContext context, int index) {
-        return Dismissible(
-          key: ValueKey(todos[index].id),
-          background: showBackground(0),
-          secondaryBackground: showBackground(1),
-          onDismissed: (_) {
-            context.read<TodoListCubit>().removeTodo(todos[index]);
-          },
-          // 삭제 시 확인
-          confirmDismiss: (_) {
-            return showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (context) {
-                return AlertDialog(
-                  title: const Text('Are you sure?'),
-                  content: const Text('Do you really want to delete?'),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(false),
-                      child: const Text('NO'),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(true),
-                      child: const Text('YES'),
-                    ),
-                  ],
-                );
-              },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<TodoListCubit, TodoListState>(
+          listener: (context, state) {
+            context.read<FilteredTodosCubit>().setFilteredTodos(
+                context.read<TodoFilterCubit>().state.filter,
+                state.todos,
+                context.read<TodoSearchCubit>().state.searchTerm,
             );
           },
-          child: TodoItem(todo: todos[index],),
-        );
-      },
+        ),
+        BlocListener<TodoFilterCubit, TodoFilterState>(
+          listener: (context, state) {
+            context.read<FilteredTodosCubit>().setFilteredTodos(
+                state.filter,
+                context.read<TodoListCubit>().state.todos,
+                context.read<TodoSearchCubit>().state.searchTerm,
+            );
+          },
+        ),
+        BlocListener<TodoSearchCubit, TodoSearchState>(
+          listener: (context, state) {
+            context.read<FilteredTodosCubit>().setFilteredTodos(
+                context.read<TodoFilterCubit>().state.filter,
+                context.read<TodoListCubit>().state.todos,
+                state.searchTerm,
+            );
+          },
+        ),
+      ],
+      child: ListView.separated(
+        primary: false,
+        shrinkWrap: true,
+        itemCount: todos.length,
+        separatorBuilder: (context, index) {
+          return const Divider(color: Colors.grey,);
+        },
+        itemBuilder: (BuildContext context, int index) {
+          return Dismissible(
+            key: ValueKey(todos[index].id),
+            background: showBackground(0),
+            secondaryBackground: showBackground(1),
+            onDismissed: (_) {
+              context.read<TodoListCubit>().removeTodo(todos[index]);
+            },
+            // 삭제 시 확인
+            confirmDismiss: (_) {
+              return showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text('Are you sure?'),
+                    content: const Text('Do you really want to delete?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(false),
+                        child: const Text('NO'),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(true),
+                        child: const Text('YES'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            child: TodoItem(todo: todos[index],),
+          );
+        },
+      ),
     );
   }
 
