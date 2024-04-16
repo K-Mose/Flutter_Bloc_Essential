@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/blocs/blocs.dart';
+import 'package:todo_app/observer/bloc_observer.dart';
 import 'package:todo_app/pages/todo_page.dart';
 
 void main() {
   runApp(const MyApp());
+  Bloc.observer = CounterObserver();
 }
 
 class MyApp extends StatelessWidget {

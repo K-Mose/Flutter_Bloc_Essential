@@ -13,7 +13,7 @@ class ActiveTodoCountState extends Equatable {
       const ActiveTodoCountState(activeTodoCount: 0);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [activeTodoCount];
 
   @override
   String toString() {
