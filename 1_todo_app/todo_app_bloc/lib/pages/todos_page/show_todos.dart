@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_app/cubits/cubits.dart';
+import 'package:todo_app/blocs/blocs.dart';
 import 'package:todo_app/models/todo_model.dart';
 
 class ShowTodos extends StatelessWidget {
@@ -8,8 +8,8 @@ class ShowTodos extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final todos = context.watch<FilteredTodosCubit>().state.filteredTodos;
-
+    final todos = context.watch<FilteredTodosBloc>().state.filteredTodos;
+    print("todos: $todos");
     return ListView.separated(
       primary: false,
       shrinkWrap: true,
@@ -23,7 +23,7 @@ class ShowTodos extends StatelessWidget {
           background: showBackground(0),
           secondaryBackground: showBackground(1),
           onDismissed: (_) {
-            context.read<TodoListCubit>().removeTodo(todos[index]);
+            context.read<TodoListBloc>().add(RemoveTodoEvent(todo: todos[index]));
           },
           // 삭제 시 확인
           confirmDismiss: (_) {
@@ -121,7 +121,7 @@ class _TodoItemState extends State<TodoItem> {
                     setState(() {
                       _error = tcEdit.text.isEmpty ? true : false;
                       if (!_error) {
-                        context.read<TodoListCubit>().editTodo(widget.todo.id, tcEdit.text);
+                        context.read<TodoListBloc>().add(EditTodoEvent(id: widget.todo.id, todoDesc: tcEdit.text));
                         Navigator.of(context).pop();
                       }
                     });
@@ -136,7 +136,7 @@ class _TodoItemState extends State<TodoItem> {
       leading: Checkbox(
         value: widget.todo.completed,
         onChanged: (bool? checked) {
-          context.read<TodoListCubit>().toggleTodo(widget.todo.id);
+          context.read<TodoListBloc>().add(ToggleTodoEvent(id: widget.todo.id));
         }
       ),
       title: Text(widget.todo.desc),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_app/cubits/cubits.dart';
+import 'package:todo_app/blocs/blocs.dart';
 import 'package:todo_app/pages/todo_page.dart';
 
 void main() {
@@ -16,24 +16,25 @@ class MyApp extends StatelessWidget {
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider<TodoFilterCubit>(
-            create: (context) => TodoFilterCubit(),),
-        BlocProvider<TodoSearchCubit>(
-            create: (context) => TodoSearchCubit(),),
-        BlocProvider<TodoListCubit>(
-            create: (context) => TodoListCubit(),),
-        BlocProvider<ActiveTodoCountCubit>(
-            create: (context) => ActiveTodoCountCubit(
+        BlocProvider<TodoFilterBloc>(
+            create: (context) => TodoFilterBloc(),),
+        BlocProvider<TodoSearchBloc>(
+            create: (context) => TodoSearchBloc(),),
+        BlocProvider<TodoListBloc>(
+            create: (context) => TodoListBloc(),),
+        BlocProvider<ActiveTodoCountBloc>(
+            create: (context) => ActiveTodoCountBloc(
               // 초기값 설정을 위해 constructor에 값을 넘겨서 초기화 시킴
-              initialActiveTodoCount: context.read<TodoListCubit>().state.todos.length,
-              todoListCubit: BlocProvider.of<TodoListCubit>(context)
-            ),),
-        BlocProvider<FilteredTodosCubit>(
-            create: (context) => FilteredTodosCubit(
-              initialTodos: context.read<TodoListCubit>().state.todos,
-              todoFilterCubit: BlocProvider.of<TodoFilterCubit>(context),
-              todoSearchCubit: BlocProvider.of<TodoSearchCubit>(context),
-              todoListCubit: BlocProvider.of<TodoListCubit>(context)
+              initialActiveTodoCount: context.read<TodoListBloc>().state.todos.length,
+              todoListBloc: BlocProvider.of<TodoListBloc>(context)
+            ),
+        ),
+        BlocProvider<FilteredTodosBloc>(
+            create: (context) => FilteredTodosBloc(
+              initialTodos: context.read<TodoListBloc>().state.todos,
+              todoFilterBloc: BlocProvider.of<TodoFilterBloc>(context),
+              todoSearchBloc: BlocProvider.of<TodoSearchBloc>(context),
+              todoListBloc: BlocProvider.of<TodoListBloc>(context)
             ),),
       ],
       child: MaterialApp(
@@ -67,7 +68,7 @@ class MainScreen extends StatelessWidget {
                   },)
                 );
               },
-              child: const Text("Cubit-StreamSubscription"),
+              child: const Text("Bloc-StreamSubscription"),
             ),
           ],
         ),

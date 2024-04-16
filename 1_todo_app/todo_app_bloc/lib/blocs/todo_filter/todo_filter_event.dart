@@ -1,8 +1,6 @@
 part of 'todo_filter_bloc.dart';
 
-sealed
-
-class TodoFilterEvent extends Equatable {
+sealed class TodoFilterEvent extends Equatable {
   const TodoFilterEvent();
 
   @override

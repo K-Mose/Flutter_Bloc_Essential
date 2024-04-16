@@ -16,7 +16,7 @@ class ActiveTodoCountBloc extends Bloc<ActiveTodoCountEvent, ActiveTodoCountStat
   ActiveTodoCountBloc({
     required this.initialActiveTodoCount,
     required this.todoListBloc,
-  }) : super(ActiveTodoCountState.initial()) {
+  }) : super(ActiveTodoCountState(activeTodoCount: initialActiveTodoCount)) {
     todoListSubscription = todoListBloc.stream.listen((TodoListState todoListState) {
       print("todoListState: $todoListState");
 
@@ -25,10 +25,13 @@ class ActiveTodoCountBloc extends Bloc<ActiveTodoCountEvent, ActiveTodoCountStat
           .toList()
           .length;
 
+      print("currentActiveTodoCount:: $currentActiveTodoCount");
+
       add(CalculateActiveTodoCountEvent(activeTodoCount: currentActiveTodoCount));
     });
 
     on<CalculateActiveTodoCountEvent>((event, emit) {
+      print("event.activeTodoCount:: ${event.activeTodoCount}");
       emit(state.copyWith(activeTodoCount: event.activeTodoCount));
     });
   }

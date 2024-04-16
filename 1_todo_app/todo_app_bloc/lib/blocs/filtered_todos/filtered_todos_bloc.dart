@@ -24,7 +24,11 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
     required this.todoListBloc,
     required this.todoFilterBloc,
     required this.todoSearchBloc,
-  }) : super(FilteredTodosState.initial()) {
+  }) : super(FilteredTodosState.initial(todos: initialTodos)) {
+    todoListSubscription = todoListBloc.stream.listen((event) { setFilteredTodos();});
+    todoFilterSubscription = todoFilterBloc.stream.listen((event) { setFilteredTodos();});
+    todoSearchSubscription = todoSearchBloc.stream.listen((event) { setFilteredTodos();});
+
     on<CalculatedFilteredTodosEvent>((event, emit) {
       emit(state.copyWith(filteredTodos: event.filteredTodos));
     });
