@@ -6,7 +6,7 @@ class Weather {
   final double tempMax;
   final String name;
   final String country;
-  final String lastUpdated;
+  final DateTime lastUpdated;
 
   const Weather({
     required this.description,
@@ -27,7 +27,7 @@ class Weather {
     tempMax: 0.0,
     name: '',
     country: '',
-    lastUpdated: DateTime(2000).toString()
+    lastUpdated: DateTime(2000)
   );
 
   factory Weather.fromJson(Map<String, dynamic> json) {
@@ -41,7 +41,7 @@ class Weather {
       tempMax: main['temp_max'],
       name: '',
       country: '',
-      lastUpdated: DateTime.now().toString(),
+      lastUpdated: DateTime.now(),
     );
   }
 
@@ -62,7 +62,7 @@ class Weather {
     double? tempMax,
     String? name,
     String? country,
-    String? lastUpdated,
+    DateTime? lastUpdated,
   }) {
     return Weather(
       description: description ?? this.description,
