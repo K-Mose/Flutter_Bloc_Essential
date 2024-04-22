@@ -33,13 +33,12 @@ class Weather {
   factory Weather.fromJson(Map<String, dynamic> json) {
     final weather = json['weather'][0];
     final main = json['main'];
-
     return Weather(
       description: weather['description'],
       icon: weather['icon'],
       temp: main['temp'],
-      tempMin: weather['tempMin'],
-      tempMax: weather['tempMax'],
+      tempMin: main['temp_min'],
+      tempMax: main['temp_max'],
       name: '',
       country: '',
       lastUpdated: DateTime.now().toString(),

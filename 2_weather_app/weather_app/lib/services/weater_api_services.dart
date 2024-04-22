@@ -44,6 +44,7 @@ class WeatherApiServices {
 
       return directGeocoding;
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -55,11 +56,13 @@ class WeatherApiServices {
       path: '/data/2.5/weather',
       queryParameters: {
         'lat': '${directGeocoding.lat}',
-        'long': '${directGeocoding.long}',
+        'lon': '${directGeocoding.lon}',
         'units': kUnit,
         'appid': dotenv.env['API_KEY']
       }
     );
+
+    print("getWeatherUri :: $uri");
 
     try {
       final http.Response response = await httpClient.get(uri);
