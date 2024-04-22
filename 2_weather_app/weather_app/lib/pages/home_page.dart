@@ -4,8 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:recase/recase.dart';
 import 'package:weather_app/constants/constants.dart';
+import 'package:weather_app/cubits/temp_settings/temp_settings_cubit.dart';
 import 'package:weather_app/cubits/weather/weather_cubit.dart';
 import 'package:weather_app/pages/search_page.dart';
+import 'package:weather_app/pages/settings_page.dart';
 import 'package:weather_app/repositories/weather_repository.dart';
 import 'package:weather_app/widgets/error_dialog.dart';
 
@@ -36,6 +38,14 @@ class _HomePageState extends State<HomePage> {
             },
             icon: const Icon(Icons.search)
           ),
+          IconButton(
+            onPressed: () async {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return const SettingsPage();
+              },));
+            },
+            icon: const Icon(Icons.settings)
+          ),
         ],
       ),
       body: _showWeather()
@@ -43,6 +53,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   String showTemperature(double temperature) {
+    final tempUnit = context.watch<TempSettingsCubit>().state.tempUnit;
+    if (tempUnit == TempUnit.fahrenheit) {
+      return "${(temperature * 9 / 5 + 32).toStringAsFixed(2)} ℉";
+    }
     return "${temperature.toStringAsFixed(2)} ℃";
   }
 
