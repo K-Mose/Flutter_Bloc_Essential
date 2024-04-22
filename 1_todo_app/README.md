@@ -24,3 +24,14 @@ Bloc 이용한 ToDoApp
 - Computed States : 다른 상태를 의존하는 상태 (복합적으로 사용되는)
   - StreamSubscription / BlocListener 로 사용
   - activeTodo / filteredTodos ..
+
+## BlocListener vs StreamSubscription
+- **BlocListener**
+  1. 서로 다른 Bloc/Cubit을 Listen(bloc-to-bloc communication)하는 동작이 화면 단위에서 일어남 (`BlocListener`의 listen) 
+     Business Logic의 분리가 안됨 
+  2. 최상위 `BlocProvider`에서 Bloc/Cubit 간 의존성 주입(DI. Dependency Injection)이 필요 없음
+
+- **StreamSubscription** 
+  1. Bloc/Cubit 내부에서 다른 Bloc/Cubit을 Listen함 (bloc.stream.listen)
+  2. 최상위 `BlocProvider`에서 Bloc/Cubit 간 의존성 주입이 필요함
+  3. 

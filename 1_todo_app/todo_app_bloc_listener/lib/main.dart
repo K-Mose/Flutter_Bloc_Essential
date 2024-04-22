@@ -28,15 +28,11 @@ class MyApp extends StatelessWidget {
             create: (context) => ActiveTodoCountBloc(
               // 초기값 설정을 위해 constructor에 값을 넘겨서 초기화 시킴
               initialActiveTodoCount: context.read<TodoListBloc>().state.todos.length,
-              todoListBloc: BlocProvider.of<TodoListBloc>(context)
             ),
         ),
         BlocProvider<FilteredTodosBloc>(
             create: (context) => FilteredTodosBloc(
               initialTodos: context.read<TodoListBloc>().state.todos,
-              todoFilterBloc: BlocProvider.of<TodoFilterBloc>(context),
-              todoSearchBloc: BlocProvider.of<TodoSearchBloc>(context),
-              todoListBloc: BlocProvider.of<TodoListBloc>(context)
             ),),
       ],
       child: MaterialApp(

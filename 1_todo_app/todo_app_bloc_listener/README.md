@@ -1,23 +1,7 @@
-# Cubit + StreamSubscription을 이용한 ToDo App
+# Cubit + BlocListener를 이용한 ToDo App
 
+[Cubit Listener](../todo_app_cubit_listener/README.md)와 같이 수정
+1. 기존 StreamSubscription 제거 
+2. 외부에서 상태를 업데이트 시킬 수 
+3. 상태 변화를 감지하는 위젯에 `BlocListener`추가
 
-# Advanced Event Transformer
-Bloc 7.2.0 부터 추가된 `EventTransformer`는 `EventMapper`를 인자로 받고 새로운 stream event를 반환한다.  
-
-**EventTransformer**를 사용한 debounce
-[Advanced Event Transformations 예제](https://bloclibrary.dev/bloc-concepts/#advanced-event-transformations)
-```dart
-EventTransformer<T> debounce<T>(Duration duration) {
-  return (events, mapper) => events.debounceTime(duration).flatMap(mapper);
-}
-
-CounterBloc() : super(0) {
-on<Increment>(
-(event, emit) => emit(state + 1),
-/// Apply the custom `EventTransformer` to the `EventHandler`.
-transformer: debounce(const Duration(milliseconds: 300)),
-);
-}
-```
-
-RxDart 로 Debounce 사용
