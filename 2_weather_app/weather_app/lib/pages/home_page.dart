@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:weather_app/cubits/weather/weather_cubit.dart';
 import 'package:weather_app/pages/search_page.dart';
 import 'package:weather_app/repositories/weather_repository.dart';
+import 'package:weather_app/widgets/error_dialog.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -42,11 +43,7 @@ class _HomePageState extends State<HomePage> {
     return BlocConsumer<WeatherCubit, WeatherState>(
         listener: (context, state) {
           if (state.status == WeatherStatus.error) {
-            showDialog(context: context, builder: (context) {
-              return AlertDialog(
-                content: Text(state.error.errMsg),
-              );
-            },);
+            errorDialog(context, state.error.errMsg);
           }
         },
         builder: (context, state) {
