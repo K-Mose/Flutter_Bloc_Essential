@@ -27,6 +27,8 @@ class WeatherApiServices {
       }
     );
 
+    print("getDirectGeocodingUri :: $uri");
+
     try {
       final http.Response response = await httpClient.get(uri);
 
@@ -44,7 +46,6 @@ class WeatherApiServices {
 
       return directGeocoding;
     } catch (e) {
-      print(e);
       rethrow;
     }
   }

@@ -10,16 +10,22 @@ class WeatherCubit extends Cubit<WeatherState> {
   final WeatherRepository weatherRepository;
 
   WeatherCubit({required this.weatherRepository}) : super(WeatherState.initial());
+  // {
+  //   stream.listen((event) {
+  //     print("THIS STATUS :: ${event.status}");
+  //   });
+  // }
 
   Future<void> fetchWeather(String city) async {
     // API 호출한 상태로 변경
     emit(state.copyWith(status: WeatherStatus.loading));
+    print(state.status);
     try {
       final Weather weather = await weatherRepository.fetchWeather(city);
       emit(state.copyWith(status: WeatherStatus.loaded, weather: weather));
-      print("Loaded State ::: $state");
     } on CustomError catch (e) {
       emit(state.copyWith(status: WeatherStatus.error, error: e));
     }
+    print("Loaded State ::: $state");
   }
 }
