@@ -1,3 +1,10 @@
+//  FirebaseException({
+//     required this.plugin,
+//     this.message,
+//     String? code,
+//     this.stackTrace,
+//     // ignore: unnecessary_this
+//   }) : this.code = code ?? 'unknown';
 class CustomError {
   final String code;
   final String message;
