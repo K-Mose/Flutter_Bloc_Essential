@@ -1,9 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fb_auth/blocs/auth/auth_bloc.dart';
 import 'package:fb_auth/pages/home_page.dart';
 import 'package:fb_auth/pages/signin_page.dart';
 import 'package:fb_auth/pages/signup_page.dart';
 import 'package:fb_auth/pages/splash_page.dart';
+import 'package:fb_auth/repositories/auth_repository.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -21,18 +26,37 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Firebas Auth',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<AuthRepository>(
+          create: (context) => AuthRepository(
+            firebaseFirestore: FirebaseFirestore.instance,
+            firebaseAuth: FirebaseAuth.instance
+          ),
+        )
+      ],
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<AuthBloc>(
+            create: (context) => AuthBloc(
+              authRepository: context.read<AuthRepository>()
+            ),
+          ),
+        ],
+        child: MaterialApp(
+          title: 'Firebas Auth',
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            useMaterial3: true,
+          ),
+          home: const SplashPage(),
+          routes: {
+            SignUpPage.routeName : (context) => const SignUpPage(),
+            SignInPage.routeName : (context) => const SignInPage(),
+            HomePage.routeName : (context) => const HomePage(),
+          },
+        ),
       ),
-      home: const SplashPage(),
-      routes: {
-        SignUpPage.routeName : (context) => const SignUpPage(),
-        SignInPage.routeName : (context) => const SignInPage(),
-        HomePage.routeName : (context) => const HomePage(),
-      },
     );
   }
 }
