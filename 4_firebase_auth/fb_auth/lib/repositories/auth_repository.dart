@@ -25,12 +25,13 @@ class AuthRepository {
     required String password
   }) async {
     try {
+      print("signup1:: $name / $email / $password");
       final fbAuth.UserCredential userCredential =
       await firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password
       );
-
+      print("signup2: $userCredential");
       // 로그인 성공 시 user 값은 not null
       final signedInUser = userCredential.user!;
       // 로그인 유저 정보 저장
