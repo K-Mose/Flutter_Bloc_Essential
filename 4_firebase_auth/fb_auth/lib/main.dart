@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fb_auth/blocs/auth/auth_bloc.dart';
+import 'package:fb_auth/blocs/profile/profile_cubit.dart';
 import 'package:fb_auth/blocs/signin/signin_cubit.dart';
 import 'package:fb_auth/blocs/signup/signup_cubit.dart';
 import 'package:fb_auth/pages/home_page.dart';
@@ -8,6 +9,7 @@ import 'package:fb_auth/pages/signin_page.dart';
 import 'package:fb_auth/pages/signup_page.dart';
 import 'package:fb_auth/pages/splash_page.dart';
 import 'package:fb_auth/repositories/auth_repository.dart';
+import 'package:fb_auth/repositories/profile_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +38,12 @@ class MyApp extends StatelessWidget {
             firebaseFirestore: FirebaseFirestore.instance,
             firebaseAuth: FirebaseAuth.instance
           ),
-        )
+        ),
+        RepositoryProvider<ProfileRepository>(
+          create: (context) => ProfileRepository(
+            firebaseFirestore: FirebaseFirestore.instance,
+          ),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -53,6 +60,11 @@ class MyApp extends StatelessWidget {
           BlocProvider<SignUpCubit>(
             create: (context) => SignUpCubit(
               authRepository: context.read<AuthRepository>()
+            ),
+          ),
+          BlocProvider<ProfileCubit>(
+            create: (context) => ProfileCubit(
+              profileRepository: context.read<ProfileRepository>()
             ),
           ),
         ],

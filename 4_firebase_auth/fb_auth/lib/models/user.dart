@@ -30,7 +30,7 @@ class User {
     );
   }
 
-  factory User.initial(DocumentSnapshot userDoc) {
+  factory User.initial() {
     return const User(
       id: '',
       name: '',
