@@ -20,7 +20,11 @@ class SplashPage extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        return Scaffold();
+        return Scaffold(
+          body: Center(
+            child: const CircularProgressIndicator(),
+          ),
+        );
       },
     );
   }
