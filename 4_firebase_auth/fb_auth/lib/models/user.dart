@@ -19,9 +19,9 @@ class User {
 
   factory User.fromDoc(DocumentSnapshot userDoc) {
     final userData = userDoc.data() as Map<String, dynamic>? ?? {};
-
+    print("User.fromDoc:: $userData}");
     return User(
-      id: userData['id'],
+      id: userDoc.id,
       name: userData['name'],
       email: userData['email'],
       profileImage: userData['profileImage'],
