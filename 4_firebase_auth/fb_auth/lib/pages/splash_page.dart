@@ -12,10 +12,22 @@ class SplashPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) async {
-        print('listener:: $state');
-        await Future.delayed(const Duration(milliseconds: 1200));
         if (state.authStatus == AuthStatus.unauthenticated) {
-          Navigator.pushNamed(context, SignInPage.routeName);
+          /*
+          pushNamedAndRemoveUntil은 false를 반환할 때 까지 라우팅 스택에서 화면 제거
+          route.settings.name :
+          ModalRoute.of(context)!.settings.name : 현재 화면의 라우팅
+           */
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            SignInPage.routeName,
+            (route) {
+              print('route.settings.name: ${route.settings.name}');
+              print('ModalRoute: ${ModalRoute.of(context)!.settings.name}');
+              return route.settings.name == ModalRoute.of(context)!.settings.name
+                  ? true : false;
+            },
+          );
         } else if (state.authStatus == AuthStatus.authenticated) {
           Navigator.pushNamed(context, HomePage.routeName);
         }
