@@ -11,8 +11,9 @@ class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AuthBloc, AuthState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         print('listener:: $state');
+        await Future.delayed(const Duration(milliseconds: 1200));
         if (state.authStatus == AuthStatus.unauthenticated) {
           Navigator.pushNamed(context, SignInPage.routeName);
         } else if (state.authStatus == AuthStatus.authenticated) {
