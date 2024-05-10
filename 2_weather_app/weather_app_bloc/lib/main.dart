@@ -1,58 +1,120 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart' as http;
 
-import 'package:weather_app/blocs/blocs.dart';
-import 'package:weather_app/pages/home_page.dart';
-import 'package:weather_app/repositories/weather_repository.dart';
-import 'package:weather_app/services/weater_api_services.dart';
-
-void main() async {
-  await dotenv.load(fileName: '.env');
-  runApp(const MyApp());
+void main() {
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
-    // Remote Api를 호출하는 Repository를 제공(Injection)하기 위해서 사용
-    return RepositoryProvider(
-      create: (context) => WeatherRepository(
-        weatherApiServices: WeatherApiServices(
-          httpClient: http.Client()
-        )
+    return MaterialApp(
+      title: 'Global Error Handling',
+      home: ErrorHandlerWidget(
+        child: MyHomePage(),
       ),
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider<WeatherBloc>(
-            create: (context) => WeatherBloc(
-              weatherRepository: context.read<WeatherRepository>()
-            )
-          ),
-          BlocProvider<TempSettingsBloc>(
-            create: (context) => TempSettingsBloc(),
-          ),
-          BlocProvider<ThemeBloc>(
-            create: (context) => ThemeBloc(
-              weatherBloc: context.read<WeatherBloc>()
-            ),
-          ),
-        ],
-        child: BlocBuilder<ThemeBloc, ThemeState>(
-          builder: (context, state) {
-            return MaterialApp(
-              title: 'Weather App',
-              theme: context.watch<ThemeBloc>().state.appTheme == AppTheme.light
-                  ? ThemeData.light()
-                  : ThemeData.dark(),
-              home: const HomePage(),
+    );
+  }
+}
+
+class MyHomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Global Error Handling Example')),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            // Uncomment the line below to trigger an error
+            // throw Exception('Simulated error');
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SecondPage()),
             );
           },
+          child: Text('Trigger Error'),
         ),
       ),
     );
+  }
+}
+
+class SecondPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Second Page')),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            // Uncomment the line below to trigger an error
+            throw Exception('Another simulated error');
+          },
+          child: Text('Trigger Another Error'),
+        ),
+      ),
+    );
+  }
+}
+
+class ErrorHandlerWidget extends StatefulWidget {
+  final Widget child;
+
+  ErrorHandlerWidget({required this.child});
+
+  @override
+  _ErrorHandlerWidgetState createState() => _ErrorHandlerWidgetState();
+}
+
+class _ErrorHandlerWidgetState extends State<ErrorHandlerWidget> {
+  // Error handling logic
+  void onError(FlutterErrorDetails errorDetails) {
+    // Add your error handling logic here, e.g., logging, reporting to a server, etc.
+    print('Caught error: ${errorDetails.exception}');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ErrorWidgetBuilder(
+      builder: (context, errorDetails) {
+        // Display a user-friendly error screen
+        return Scaffold(
+          appBar: AppBar(title: Text('Error')),
+          body: Center(
+            child: Text('Something went wrong. Please try again later.'),
+          ),
+        );
+      },
+      onError: onError,
+      child: widget.child,
+    );
+  }
+}
+
+class ErrorWidgetBuilder extends StatefulWidget {
+  final Widget Function(BuildContext, FlutterErrorDetails) builder;
+  final void Function(FlutterErrorDetails) onError;
+  final Widget child;
+
+  ErrorWidgetBuilder({
+    required this.builder,
+    required this.onError,
+    required this.child,
+  });
+
+  @override
+  _ErrorWidgetBuilderState createState() => _ErrorWidgetBuilderState();
+}
+
+class _ErrorWidgetBuilderState extends State<ErrorWidgetBuilder> {
+  @override
+  void initState() {
+    super.initState();
+    // Set up global error handling
+    FlutterError.onError = widget.onError;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.child;
   }
 }
